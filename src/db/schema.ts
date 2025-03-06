@@ -1,6 +1,7 @@
 import { pgTable, serial, varchar, boolean, timestamp, integer, text } from "drizzle-orm/pg-core"
 import { relations } from "drizzle-orm"
 
+// εδώ ορίζουμε ΜΟΝΟ το σχήμα της βάσης, για input validation θα το κάνουμε extend στο src\zod-schemas\customer.ts
 export const customers = pgTable("customers", {
     id: serial("id").primaryKey(),
     firstName: varchar("first_name").notNull(),
@@ -14,6 +15,7 @@ export const customers = pgTable("customers", {
     zip: varchar("zip", { length: 10 }).notNull(),
     notes: text("notes"),
     active: boolean("active").notNull().default(true),
+    // createdBy: 
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow().$onUpdate(() => new Date()),
 })

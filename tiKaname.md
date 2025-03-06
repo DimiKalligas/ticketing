@@ -30,6 +30,8 @@ set SSO session inactivity timeout to 604800 (Monday to Friday)
 για να κάνουμε αλλαγές στη βάση, πρώτα: generate -> μετά: migrate
 npm run db:generate φτιάχνει το schema 
 npm run db:migrate στέλνει τις αλλαγές
+Ορίσαμε το schema της βάσης στο src\db\schema.ts --- και το κάναμε extend για form validation στην CustomerForm με <createInsertSchema(customers, zod_schema)> οπου το ονομάσαμε insertCustomerSchema
+Η βάση μας βρίσκεται στο https://console.neon.tech/app/projects/frosty-shadow-10196118?database=neondb
 
 # Data Access Layer (DAL)
 Οι άλλες μέθοδοι για να διαβάσουμε data είναι επικίνδυνοι:
@@ -56,12 +58,40 @@ Flow:
 - <CustomerForm />: λόγω <defaultValues> θα δείξει ή τον customer, η κενό
 
 # kinde
-κάναμε npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine
+κάναμε npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine, Applications -> API -> ...Authorize application, ...Manage scopes -> read:users
+Στο CustomerForm βλέπουμε αν ο customer είναι Manager & τότε μόνο μπορεί να κάνει ενα record inactive - στις CustomerForm & ΤicketFormPage βλέπουμε πως παίρνουμε τα user rights από το kinde
+Θυμίσου: στο kinde ορίσαμε σε ποιά σελίδα κάνει landing μετά το log-in.
+
+# Form Validation
+- client: const form = useForm<insertCustomerSchemaType>
+- server: 1.const parsed = insertCustomerSchema.safeParse(formData)
+            2. Τα constraints τα πιάνει αφού πάει να σώσει -> θέλei try/catch στη await db.insert & db.update
+αν θέλω banner, να δω την DisplayServerActionResponse
+
+# Search flow
+- η σελίδα των customers είναι server action που δέχεται searchParams
+- αυτή παίρνει results από μια function που ψάχνει τη βάση με τα searchParams
+- και κάνει return 
+    1. ένα input πεδίο φόρμας που καλεί το ίδιο server action με τα searchParams (το όνομα του input)
+    2. τα results
+- partial & flexible searches: δες <searchDBforCus>
+
+# Header navigation
+Κοίτα <components\Header> & <components\NavButtonMenu>
+
+# Pagination
+ο κώδικας πριν το pagination είναι στο 10
 
 > TO DO (CTRL-K V)
+0.0 Αρχική Customers=empty Αρχική tickets=all να το δω
+0. Όταν κάνω edit ticket -> κολλάει στο updating
+    Οταν κάνω update customer -> δεν κάνει redirect στους customers..
 1. [ ] να δω docs routing > error handling
 2. [ ] να δουλέψω το InputWithLabel σε δικό μου project
 3. [ ] γιατί χρησιμοποιεί const form = useFormContext() αντί για useForm()?
     - useForm() is used to initialize a new form and is typically used in the parent component.
     - useFormContext() is useful in large forms with multiple child components, avoiding unnecessary prop drilling.
-4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js?
+4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js? RBAC
+5. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
+6.1 [ ] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
+6. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ.

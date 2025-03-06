@@ -3,6 +3,31 @@ import { getTicket } from "@/lib/queries/getTicket";
 import { BackButton } from "@/components/BackButton";
 import TicketForm from "@/app/(ts)/tickets/form/TicketForm";
 
+import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+
+import { Users, init as kindeInit } from "@kinde/management-api-js"
+
+// for reference 
+// export async function generateMetadata({
+//     searchParams,
+// }: {
+//     searchParams: Promise<{ [key: string]: string | undefined }>
+// }) {
+//     const { customerId, ticketId } = await searchParams
+
+//     if (!customerId && !ticketId) return {
+//         title: 'Missing Ticket ID or Customer ID'
+//     }
+
+//     if (customerId) return {
+//         title: `New Ticket for Customer #${customerId}`
+//     }
+
+//     if (ticketId) return {
+//         title: `Edit Ticket #${ticketId}`
+//     }
+// }
+
 export default async function TicketFormPage({
     searchParams,
 }: {
@@ -21,6 +46,13 @@ export default async function TicketFormPage({
                 </>
             )
         }
+
+        const { getPermission, getUser } = getKindeServerSession()
+        const [managerPermission, user] = await Promise.all([
+            getPermission("manager"),
+            getUser(),
+        ])
+        const isManager = managerPermission?.isGranted
 
         // getting a customer ID means new ticket
         if (customerId) {
@@ -46,8 +78,16 @@ export default async function TicketFormPage({
             }
 
             // return ticket form 
-            console.log(customer)
-            return <TicketForm customer={customer} />
+            if (isManager) {
+                kindeInit() // kinde Management API
+                const { users } = await Users.getUsers() // the techs that are assigned to a ticket
+
+                const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
+
+                return <TicketForm customer={customer} techs={techs} />
+            } else {
+                return <TicketForm customer={customer} />
+            }
         }
 
         // getting a ticket ID means editing it
@@ -66,9 +106,21 @@ export default async function TicketFormPage({
             const customer = await getCustomer(ticket.customerId)
 
             // return to edit ticket form 
-            console.log('ticket: ', ticket)
-            console.log('customer: ', customer)
-            return <TicketForm customer={customer} ticket={ticket} />
+            // console.log('ticket: ', ticket)
+            // console.log('customer: ', customer)
+            if (isManager) {
+                kindeInit() // kinde Management API
+                const { users } = await Users.getUsers() // the techs that are assigned to a ticket
+
+                const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
+
+                return <TicketForm customer={customer} ticket={ticket} techs={techs} />
+            } else {
+                // αν δεν είσαι manager, πρέπει να είσαι ο ίδιος για να κάνεις edit
+                const isEditable = user.email?.toLowerCase() === ticket.tech.toLowerCase()
+                return <TicketForm customer={customer} ticket={ticket} isEditable={isEditable} />
+            }
+            // return <TicketForm customer={customer} ticket={ticket} />
 
         }
 

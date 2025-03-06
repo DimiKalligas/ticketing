@@ -3,6 +3,19 @@ import { getCustomer } from "@/lib/queries/getCustomer";
 import { BackButton } from "@/components/BackButton";
 import CustomerForm from "@/app/(ts)/customers/form/CustomerForm";
 
+// Not needed now
+// export async function generateMetadata({
+//     searchParams,
+// }: {
+//     searchParams: Promise<{ [key: string]: string | undefined }>
+// }) {
+//     const { customerId } = await searchParams
+
+//     if (!customerId) return { title: "New Customer"}
+
+//     return { title: `Edit Customer #${customerId}` }
+// }
+
 // use: localhost:3000/customers/form?customerId=4
 // searchParams are Promises, so, async ->
 export default async function CustomerFormPage({
