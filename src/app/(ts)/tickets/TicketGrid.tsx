@@ -8,21 +8,18 @@ import {
   ValidationModule, 
   PaginationModule, 
   themeQuartz, 
-  themeMaterial,
 } from 'ag-grid-community';
 
-// import { ClientSideRowModelModule }  from "@ag-grid-community/client-side-row-model"
 import type { TicketSearchResultsType } from "@/lib/queries/getTicketSearchResults"
 
 type Props = {
     data: TicketSearchResultsType,
 }
-export default function TicketGrid({ data: data }: Props) {
-    // const [gridApi, setGridApi] = useState<GridApi | null>(null);    
+export default function TicketGrid({ data: data }: Props) {  
     ModuleRegistry.registerModules([
       PaginationModule,
       ClientSideRowModelModule,
-      ValidationModule, 
+      // ValidationModule, 
     ]);
  
     const displayedFields = ["ticketDate", "title", "tech", "firstName", "lastName", "email", "completed"];    
@@ -38,12 +35,12 @@ export default function TicketGrid({ data: data }: Props) {
     }));
 
   return (
-    <div className='rounded-sm' style={{ height: 200, width: "100%", marginTop: 20, }}>
+    <div  style={{ height: 400, width: "100%", marginTop: 20, }}>
       <AgGridReact
-        modules={[ClientSideRowModelModule, ValidationModule ]}
+        // modules={[ClientSideRowModelModule, ValidationModule ]} πως και δεν τα χρειάζεται??...
         key={data.length} // 🔹 Ensures re-render when data changes
 
-        theme={themeMaterial}
+        theme={themeQuartz}
         columnDefs={colDefs}
         rowData={data}
         pagination={true} // ✅ Ensures pagination is turned on

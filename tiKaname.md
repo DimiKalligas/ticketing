@@ -80,7 +80,7 @@ Flow:
 Κοίτα <components\Header> & <components\NavButtonMenu>
 
 # Pagination
-ο κώδικας πριν το pagination είναι στο 10
+ο κώδικας πριν το pagination είναι στο video 10
 
 > TO DO (CTRL-K V)
 0.0 Αρχική Customers=empty Αρχική tickets=all να το δω
