@@ -93,5 +93,5 @@ Flow:
     - useFormContext() is useful in large forms with multiple child components, avoiding unnecessary prop drilling.
 4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js? RBAC
 5. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
-6.1 [ ] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
-6. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ.
+6 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
+7. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ. να παίρνει το light/dark από το theme
