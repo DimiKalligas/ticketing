@@ -86,9 +86,6 @@ Flow:
 ο κώδικας πριν το pagination είναι στο video 10
 
 > TO DO (CTRL-K V)
-0.0 Αρχική Customers=empty Αρχική tickets=all να το δω
-0. Όταν κάνω edit ticket -> κολλάει στο updating
-    Οταν κάνω update customer -> δεν κάνει redirect στους customers..
 1. [ ] να δω docs routing > error handling
 2. [ ] να δουλέψω το InputWithLabel σε δικό μου project
 3. [ ] γιατί χρησιμοποιεί const form = useFormContext() αντί για useForm()?

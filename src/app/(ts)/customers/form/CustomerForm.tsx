@@ -18,6 +18,7 @@ import { saveCustomerAction } from "@/app/actions/saveCustomerAction"
 import { useRouter } from "next/navigation"
 import { upsertCustomer, deleteCustomer } from '@/app/actions/saveCustomerAction'
 import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse"
+import { LoaderCircle } from "lucide-react"
 
 type Props = {
     // customer?: selectCustomerSchemaType, ***
@@ -27,6 +28,7 @@ type Props = {
 export default function CustomerForm({ customer }: Props) {
     const [errors, setErrors] = useState<Record<string, string[]> | null>(null);
     const [success, setSuccess] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const router = useRouter()
     const { getPermission, isLoading } = useKindeBrowserClient()
     // isManager could be Admin also
@@ -64,6 +66,7 @@ export default function CustomerForm({ customer }: Props) {
     async function submitForm(data: insertCustomerSchemaType) {
         setErrors(null);
         setSuccess(false);
+        setIsSaving(true)
         console.log('form submitted!');
             
         const result = await upsertCustomer(data)
@@ -102,6 +105,8 @@ export default function CustomerForm({ customer }: Props) {
       
           toast.success("Customer added successfully!");
           setSuccess(true);
+          setIsSaving(false)
+          router.back()
         }   
             
     return (
@@ -180,7 +185,11 @@ export default function CustomerForm({ customer }: Props) {
                                 className="w-3/4" // leave out a 1/4 for the Reset
                                 variant='default'
                                 title='Save'>
-                                    Save
+                                {isSaving ? (
+                                    <>
+                                        <LoaderCircle className="animate-spin" /> Saving
+                                    </>
+                                ) : "Save"}
                             </Button>
                             <Button
                                 type='button'

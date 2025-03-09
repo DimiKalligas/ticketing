@@ -29,6 +29,7 @@ type Props = {
         description: string,
     }[],
     isEditable?: boolean,
+    isManager?: boolean | undefined
 }
 
 export default function TicketForm({
@@ -38,6 +39,8 @@ export default function TicketForm({
     const [success, setSuccess] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const isManager = Array.isArray(techs)
+
+    const router = useRouter()
 
     const defaultValues: insertTicketSchemaType = {
         id: ticket?.id ?? "(New)",
@@ -70,6 +73,14 @@ export default function TicketForm({
         }
         console.log("Server Response:", result);
 
+        if (result.success) {
+            toast.success(result.message);
+            setSuccess(true);
+            setIsSaving(false)
+            router.back()
+            // return;
+      } 
+
         // Handle errors
         if (!result.success) {
             if (result.error && typeof result.error === "object") {
@@ -95,9 +106,6 @@ export default function TicketForm({
             setIsSaving(false)
             return;
           }
-      
-          toast.success("Ticket added successfully!");
-          setSuccess(true);
     }
 
     return (
