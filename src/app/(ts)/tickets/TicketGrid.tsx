@@ -5,16 +5,18 @@ import {
   ColDef, 
   ModuleRegistry, 
   ClientSideRowModelModule, 
-  ValidationModule, 
+  // ValidationModule, 
   PaginationModule, 
   themeQuartz, 
   colorSchemeDarkWarm,
   colorSchemeLightCold,
+  RowClickedEvent,
 } from 'ag-grid-community';
 import { useTheme } from "next-themes"
 
 import type { TicketSearchResultsType } from "@/lib/queries/getTicketSearchResults"
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Props = {
     data: TicketSearchResultsType,
@@ -22,36 +24,33 @@ type Props = {
 
 export default function TicketGrid({ data: data }: Props) {  
   const { theme } = useTheme()
+  const router = useRouter();
 
+  ModuleRegistry.registerModules([
+    PaginationModule,
+    ClientSideRowModelModule,
+    // ValidationModule, 
+  ]);
 
-    ModuleRegistry.registerModules([
-      PaginationModule,
-      ClientSideRowModelModule,
-      // ValidationModule, 
-    ]);
- 
-    const displayedFields = ["ticketDate", "title", "tech", "firstName", "lastName", "email", "completed"];    
+  const displayedFields = ["ticketDate", "title", "tech", "firstName", "lastName", "email", "completed"];    
+
+  const colDefs: ColDef[] = displayedFields.map((field) => ({
+    headerName: field.charAt(0).toUpperCase() + field.slice(1), // Capitalize first letter
+    field,
+    valueFormatter: (params) => {
+      if (field === "completed") return params.value ? "✅ Yes" : "❌ No"; // Format boolean
+      if (field === "ticketDate") return new Date(params.value).toLocaleDateString(); // Format date
+      return params.value;
+    },
+  }));
   
-    const colDefs: ColDef[] = displayedFields.map((field) => ({
-      headerName: field.charAt(0).toUpperCase() + field.slice(1), // Capitalize first letter
-      field,
-      valueFormatter: (params) => {
-        if (field === "completed") return params.value ? "✅ Yes" : "❌ No"; // Format boolean
-        if (field === "ticketDate") return new Date(params.value).toLocaleDateString(); // Format date
-        return params.value;
-      },
-    }));
+  // Handle row click and navigate
+  const onRowClicked = useCallback((event: RowClickedEvent) => {
+    const recordId = event.data.id;
+    router.push(`/tickets/form?ticketId=${recordId}`); // Redirect to record page
+  }, [router]);
 
-    const rowSelection = useMemo(() => { 
-      return {
-            mode: 'singleRow'
-        };
-    }, []);
-    console.log('theme:', theme);
-    
-    const myTheme = theme === 'dark' ? themeQuartz.withPart(colorSchemeDarkWarm) : themeQuartz.withPart(colorSchemeLightCold);
-    // themeQuartz.withPart(colorSchemeDark);
-    // theme === 'dark' ? themeQuartz.overrides = colorSchemeDark : themeQuartz.overrides = null;
+  const myTheme = theme === 'dark' ? themeQuartz.withPart(colorSchemeDarkWarm) : themeQuartz.withPart(colorSchemeLightCold);
 
   return (
     <div  style={{ height: 400, width: "100%", marginTop: 20, }}>
@@ -66,10 +65,8 @@ export default function TicketGrid({ data: data }: Props) {
         paginationPageSizeSelector={[2, 5, 10]}
         paginationPageSize={5} // ✅ Sets the correct page size
 
-        rowSelection={rowSelection}
-        // paginationAutoPageSize={false} // ✅ Prevents auto-size adjustments
-        // domLayout="autoHeight" // ✅ Allows dynamic height adjustments
-        // suppressPaginationPanel={false} // ✅ Shows pagination panel
+        rowSelection='single'
+        onRowClicked={onRowClicked} 
       />
     </div>
   );
