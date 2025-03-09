@@ -30,9 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* για το dark-mode, από shadcn */}
         <ThemeProvider
             attribute="class"
@@ -42,7 +40,7 @@ export default function RootLayout({
           >
             {children}
             <Toaster />
-          </ThemeProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

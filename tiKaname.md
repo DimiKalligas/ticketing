@@ -3,6 +3,9 @@
 # background image
 το βάλαμε ως bg-home-img (ή bg-background?) στο tailwind.config.ts
 
+# Dark Theme
+από ShadCN, παίζει με ThemeProvider με το οποίο κάνουμε wrap το root layout, σώζει στο localStorage, έχουμε τα <ModeToggle> & <ui/dropdown-menu> components από ShadCN
+
 # tailwind.config.css
 1. ορίσαμε το background: βάλαμε ως <bg-home-img>
 2. ορίσαμε τa <animate-slide> & <animate-appear>: τα keyframes & το animation
@@ -94,4 +97,4 @@ Flow:
 4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js? RBAC
 5. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
 6 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
-7. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ. να παίρνει το light/dark από το theme
+7. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ. να παίρνει το light/dark από το theme = read localStorage theme
