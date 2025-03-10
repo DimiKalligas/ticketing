@@ -35,7 +35,8 @@ export default async function Tickets({
         <>
             <TicketSearch />
             {/* <p>{JSON.stringify(results)}</p> */}
-            {results.length ? <TicketTable data={results} /> : <p className="mt-4">No results found</p>}
+            {/* {results.length ? <TicketTable data={results} /> : <p className="mt-4">No results found</p>} */}
+            {results.length ? <TicketGrid data={results} /> : <p className="mt-4">No results found</p>}
         </>
     )
 }
