@@ -1,6 +1,7 @@
 import CustomerSearch from "./CustomerSearch"
 import { searchDBforCus } from "@/lib/queries/getCustomerSearchResults"
 import CustomerTable from '@/app/(ts)/customers/CustomerTable'
+import CustomerGrid from "./CustomerGrid"
 
 export const metadata = {
   title: 'Customer Search'
@@ -22,7 +23,8 @@ export default async function Customers({
       <>
         <CustomerSearch />
         {/* <p>{JSON.stringify(results)}</p> */}
-        {results.length ? <CustomerTable data={results} /> :(
+        {results.length ? <CustomerGrid data={results} /> :(
+        // {results.length ? <CustomerTable data={results} /> :(
           <p className="mt-4">No results found.</p>
         ) }
       </>

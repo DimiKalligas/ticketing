@@ -28,6 +28,13 @@ flex flex-col sm:flex-row για adaptive
 στον production αλλάζουμε το callback 
 set SSO session inactivity timeout to 604800 (Monday to Friday)
 κάνουμε Add User
+κάναμε npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine, Applications -> API -> ...Authorize application, ...Manage scopes -> read:users
+Στο CustomerForm βλέπουμε αν ο customer είναι Manager & τότε μόνο μπορεί να κάνει ενα record inactive - στις CustomerForm & ΤicketFormPage βλέπουμε πως παίρνουμε τα user rights από το kinde
+Θυμίσου: στο kinde ορίσαμε σε ποιά σελίδα κάνει landing μετά το log-in.
+μας δίνει από server  <const { isAuthenticated } = getKindeServerSession()
+            const isAuth = await isAuthenticated()>
+        από client  <const { getPermission, isLoading } = useKindeBrowserClient()
+                    const isManager = !isLoading && getPermission('manager')?.isGranted>
 
 # drizzle
 για να κάνουμε αλλαγές στη βάση, πρώτα: generate -> μετά: migrate
@@ -60,11 +67,6 @@ Flow:
 - αν δεν τον βρει: κάνει return <CustomerForm />
 - <CustomerForm />: λόγω <defaultValues> θα δείξει ή τον customer, η κενό
 
-# kinde
-κάναμε npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine, Applications -> API -> ...Authorize application, ...Manage scopes -> read:users
-Στο CustomerForm βλέπουμε αν ο customer είναι Manager & τότε μόνο μπορεί να κάνει ενα record inactive - στις CustomerForm & ΤicketFormPage βλέπουμε πως παίρνουμε τα user rights από το kinde
-Θυμίσου: στο kinde ορίσαμε σε ποιά σελίδα κάνει landing μετά το log-in.
-
 # Form Validation
 - client: const form = useForm<insertCustomerSchemaType>
 - server: 1.const parsed = insertCustomerSchema.safeParse(formData)
@@ -94,4 +96,8 @@ Flow:
 4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js? RBAC
 5. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
 6 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
-7. [ ] να γίνεται edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) ή και dropdown menu για το tech π.χ. να παίρνει το light/dark από το theme = read localStorage theme
+7. [x] Ticket Table: αν auth: να γίνεται 
+    7.1 [ ] edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) 
+    7.2 [ ] και dropdown menu για το tech
+    7.3 [x] να παίρνει το light/dark από το theme = read localStorage theme
+8. [ ] να δω πάλι γιατί έχουμε 2 schemas (στο zod\schemas & στο lib/queries/ db\schema?)

@@ -16,17 +16,24 @@ import {
 import { useTheme } from "next-themes"
 
 import type { TicketSearchResultsType } from "@/lib/queries/getTicketSearchResults"
+import type { selectTicketSchemaType } from '@/zod-schemas/ticket';
 import { useCallback, useMemo, } from 'react';
 import { useRouter } from 'next/navigation';
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 type Props = {
-    data: TicketSearchResultsType,
+  data: selectTicketSchemaType,
+  // data: TicketSearchResultsType,
 }
 
 export default function TicketGrid({ data: data }: Props) {  
   const { theme } = useTheme()
   const router = useRouter();
-  
+  const { getPermission, isLoading } = useKindeBrowserClient()
+      
+  // // isManager could be Admin also
+  const isManager = !isLoading && getPermission('manager')?.isGranted
+            
   ModuleRegistry.registerModules([
     PaginationModule,
     ClientSideRowModelModule,
@@ -92,22 +99,25 @@ export default function TicketGrid({ data: data }: Props) {
   const myTheme = theme === 'dark' ? themeQuartz.withPart(colorSchemeDarkWarm) : themeQuartz.withPart(colorSchemeLightCold);
 
   return (
-    <div  style={{ height: 400, width: "100%", marginTop: 20, }}>
-      <AgGridReact 
-        // modules={[ClientSideRowModelModule, ValidationModule ]} πως και δεν τα χρειάζεται??...
-        key={data.length} // 🔹 Ensures re-render when data changes
+    <>
+      {isManager ? (<p className='mt-5'>Είστε συνδεδεμένος</p>) : null}
+      <div  style={{ height: 400, width: "100%", marginTop: 20, }}>
+        <AgGridReact 
+          // modules={[ClientSideRowModelModule, ValidationModule ]} πως και δεν τα χρειάζεται??...
+          key={data.length} // 🔹 Ensures re-render when data changes
 
-        theme={myTheme}
-        columnDefs={colDefs}
-        rowData={data}
-        pagination={true} // ✅ Ensures pagination is turned on
-        paginationPageSizeSelector={[2, 5, 10]}
-        paginationPageSize={5} // ✅ Sets the correct page size
+          theme={myTheme}
+          columnDefs={colDefs}
+          rowData={data}
+          pagination={true} // ✅ Ensures pagination is turned on
+          paginationPageSizeSelector={[2, 5, 10]}
+          paginationPageSize={5} // ✅ Sets the correct page size
 
-        rowSelection='single'
-        onRowClicked={onRowClicked} 
-        // defaultColDef={defaultColDef}
-      />
-    </div>
+          rowSelection='single'
+          onRowClicked={onRowClicked} 
+          // defaultColDef={defaultColDef}
+        />
+      </div>
+    </>
   );
 }
