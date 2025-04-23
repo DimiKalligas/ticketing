@@ -1,6 +1,5 @@
 'use server'
 
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { db } from '@/db'
 import { customers } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
@@ -8,14 +7,16 @@ import { insertCustomerSchema, type insertCustomerSchemaType } from '@/zod-schem
 import { redirect } from 'next/navigation'
 
 export async function upsertCustomer(formData: insertCustomerSchemaType) {
-    const { isAuthenticated } = getKindeServerSession()
+    // const { isAuthenticated } = getKindeServerSession()
+    
+    console.log('in saveCustomerAction..');
     
     // Check if user is authenticated
-    const isAuth = await isAuthenticated()
-    if (!isAuth) {
-      // throw new Error('Unauthorized: Please log in')
-      redirect('/login')
-    }
+    // const isAuth = await isAuthenticated()
+    // if (!isAuth) {
+    //   // throw new Error('Unauthorized: Please log in')
+    //   redirect('/login')
+    // }
 
     // Πως γράφουμε sql
     // const query = sql.raw("select * from Customers")

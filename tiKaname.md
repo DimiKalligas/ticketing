@@ -1,5 +1,7 @@
 από Dave Gray https://www.youtube.com/watch?v=djDgTYrFMAY&list=PLPfcmcDlsjWvJWK2i5IrTUMmjZe9Ozd9f&index=5
 
+login με **jim@email.com 123**
+
 # background image
 το βάλαμε ως bg-home-img (ή bg-background?) στο tailwind.config.ts
 
@@ -28,8 +30,8 @@ flex flex-col sm:flex-row για adaptive
 στον production αλλάζουμε το callback 
 set SSO session inactivity timeout to 604800 (Monday to Friday)
 κάνουμε Add User
-κάναμε npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine, Applications -> API -> ...Authorize application, ...Manage scopes -> read:users
-Στο CustomerForm βλέπουμε αν ο customer είναι Manager & τότε μόνο μπορεί να κάνει ενα record inactive - στις CustomerForm & ΤicketFormPage βλέπουμε πως παίρνουμε τα user rights από το kinde
+κάναμε `npm i @kinde-oss/kinde-auth-nextjs @kinde/management-api-js`, το δεύτερο είναι για διαχείριση χρηστών -> χρειάζεται να κάνουμε Add application στο kinde -> Machine-to-machine, Applications -> API -> ...Authorize application, ...Manage scopes -> read:users
+Στο <CustomerForm> βλέπουμε αν ο customer είναι Manager & τότε μόνο μπορεί να κάνει ενα record inactive - στις <CustomerForm> & <ΤicketFormPage> βλέπουμε πως παίρνουμε τα user rights από το kinde
 Θυμίσου: στο kinde ορίσαμε σε ποιά σελίδα κάνει landing μετά το log-in.
 μας δίνει από server  <const { isAuthenticated } = getKindeServerSession()
             const isAuth = await isAuthenticated()>
@@ -58,8 +60,9 @@ To DAL μας βρίσκεται στα <app\(ts)\customers\form> & <app\(ts)\ti
 Όλο το application είναι στο (ts) folder
 H `<layout>` καλεί την `<Header>` -> H `<Header>` έχει `NavButton` για routing
 To **Data layer** για customer data είναι στο `E:\dev\NextJS\ticketing\src\app\(ts)\customers\form\page.tsx`
-Flow: 
-εχουμε μια σελίδα που διαβάζει από τα searchParams ποιόν πελάτη θέλουμε, πάει κατ βρίσκει τα στοιχεία του, και καλεί μια φόρμα η οποία είτε κάνει populate τα πεδία με τις τιμές που τις στέλνουμε, ή αλλιώς βάζει τα default values (κενά) -> Αναλυτικά:
+
+# Flow: 
+εχουμε μια σελίδα που διαβάζει από τα searchParams ποιόν πελάτη θέλουμε, πάει και βρίσκει τα στοιχεία του, και καλεί μια φόρμα η οποία είτε κάνει populate τα πεδία με τις τιμές που τις στέλνουμε, ή αλλιώς βάζει τα default values (κενά) -> Αναλυτικά:
 όταν ζητάμε `http://localhost:3000/customers/form?customerId=4` 
 - τρέχει η <src\app\(ts)\customers\form\CustomerFormPage({searchParams})>
 - καλεί το <getCustomer> query
@@ -87,17 +90,36 @@ Flow:
 # Pagination
 ο κώδικας πριν το pagination είναι στο video 10
 
+# Από Kinde σε Jose
+uninstall @kinde-oss/kinde-auth-nextjs
+remove env vars
+remove API endpoint src/app/api/auth/[kindeauth]/route.js
+uninstall @kinde-oss/kinde-auth-nextjs/components
+To login γίνεται στο src/app/login/page: πλέον δουλεύει με το </actions>
+setup <@/lib/session.ts>
+install jose
+*** Θα πρέπει να έχω Admin / Manager / User roles **
+
+
 > TO DO (CTRL-K V)
-1. [ ] να δω docs routing > error handling
-2. [ ] να δουλέψω το InputWithLabel σε δικό μου project
-3. [ ] γιατί χρησιμοποιεί const form = useFormContext() αντί για useForm()?
+0. [x] να ξηλώσω το kinde & να γίνει με Jose-JWT αλά Cosden
+0. [X] στο TicketGrid να ελέγχει αν είναι manager -> middleware!
+1. [] να φτιάξω τη app\login\page ξανά
+1. [] να φτιάξω τη σελίδα του ticket: ./src/app/(ts)/tickets/form/page.tsx 
+2. [] η ticket form να διαβάζει role
+3. [] το middleware κοιτάει απλώς αν υπάρχει session..
+4 [ ] να δω docs routing > error handling
+5. [ ] να δουλέψω το InputWithLabel σε δικό μου project
+6. [ ] γιατί χρησιμοποιεί const form = useFormContext() αντί για useForm()?
     - useForm() is used to initialize a new form and is typically used in the parent component.
     - useFormContext() is useful in large forms with multiple child components, avoiding unnecessary prop drilling.
-4. [ ] τo kinde management (διαχείριση χρηστών) πως γίνεται με Auth.js? RBAC
-5. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
-6 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
-7. [x] Ticket Table: αν auth: να γίνεται 
+7. [] RBAC
+8. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
+9 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
+10. [x] Ticket Table: αν auth: να γίνεται 
     7.1 [ ] edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) 
     7.2 [ ] και dropdown menu για το tech
     7.3 [x] να παίρνει το light/dark από το theme = read localStorage theme
-8. [ ] να δω πάλι γιατί έχουμε 2 schemas (στο zod\schemas & στο lib/queries/ db\schema?)
+11. [χ] να δω πάλι γιατί έχουμε 2 schemas (στο zod\schemas & στο lib/queries/ db\schema?)
+    στο <zod\schemas> έχουμε τα drizzle schemas (createInsert & createSelect που προσθέτουνε regex & μήνυμα λάθους πάνω στο reference to db schema, το οποίο χρειάζεται άσχετα αν εδώ το τροποποιούμε κιόλας!)
+

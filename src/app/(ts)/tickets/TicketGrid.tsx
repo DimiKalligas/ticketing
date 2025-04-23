@@ -19,7 +19,6 @@ import type { TicketSearchResultsType } from "@/lib/queries/getTicketSearchResul
 import type { selectTicketSchemaType } from '@/zod-schemas/ticket';
 import { useCallback, useMemo, } from 'react';
 import { useRouter } from 'next/navigation';
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 
 type Props = {
   data: selectTicketSchemaType,
@@ -29,10 +28,10 @@ type Props = {
 export default function TicketGrid({ data: data }: Props) {  
   const { theme } = useTheme()
   const router = useRouter();
-  const { getPermission, isLoading } = useKindeBrowserClient()
+  // const { getPermission, isLoading } = useKindeBrowserClient()
       
   // // isManager could be Admin also
-  const isManager = !isLoading && getPermission('manager')?.isGranted
+  // const isManager = !isLoading && getPermission('manager')?.isGranted
             
   ModuleRegistry.registerModules([
     PaginationModule,
@@ -100,7 +99,7 @@ export default function TicketGrid({ data: data }: Props) {
 
   return (
     <>
-      {isManager ? (<p className='mt-5'>Είστε συνδεδεμένος</p>) : null}
+      <p className='mt-5'>Είστε συνδεδεμένος</p>
       <div  style={{ height: 400, width: "100%", marginTop: 20, }}>
         <AgGridReact 
           // modules={[ClientSideRowModelModule, ValidationModule ]} πως και δεν τα χρειάζεται??...

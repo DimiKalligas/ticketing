@@ -3,10 +3,6 @@ import { getTicket } from "@/lib/queries/getTicket";
 import { BackButton } from "@/components/BackButton";
 import TicketForm from "@/app/(ts)/tickets/form/TicketForm";
 
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-
-import { Users, init as kindeInit } from "@kinde/management-api-js"
-
 // for reference 
 // export async function generateMetadata({
 //     searchParams,
@@ -34,7 +30,6 @@ export default async function TicketFormPage({
     searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
     try {
-
         const { customerId, ticketId } = await searchParams
 
         // no customer & no ticket = go back!

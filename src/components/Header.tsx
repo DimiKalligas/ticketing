@@ -1,11 +1,12 @@
 import { HomeIcon, File, UsersRound, LogOut } from 'lucide-react'
 import Link from 'next/link'
-import { LogoutLink } from '@kinde-oss/kinde-auth-nextjs/components'
 
 import { Button } from '@/components/ui/button'
 import { NavButton } from '@/components/NavButton'
 import { ModeToggle } from '@/components/ModeToggle'
 import { NavButtonMenu } from './NavButtonMenu'
+import { deleteSession } from '@/lib/session'
+import { redirect } from 'next/navigation';
 
 export function Header() {
   return (
@@ -38,12 +39,15 @@ export function Header() {
                 className='rounded-full'
                 asChild // in order to wrap this link
               >
-                <LogoutLink>
-                  <LogOut />
-                </LogoutLink>
+                logout()
               </Button>
             </div>
         </div>
     </header>
   )
+}
+
+export async function logout() {
+  await deleteSession();
+  redirect("/login");
 }

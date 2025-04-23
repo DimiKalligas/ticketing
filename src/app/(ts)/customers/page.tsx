@@ -1,6 +1,6 @@
 import CustomerSearch from "./CustomerSearch"
 import { searchDBforCus } from "@/lib/queries/getCustomerSearchResults"
-import CustomerTable from '@/app/(ts)/customers/CustomerTable'
+// import CustomerTable from '@/app/(ts)/customers/CustomerTable'
 import CustomerGrid from "./CustomerGrid"
 
 export const metadata = {

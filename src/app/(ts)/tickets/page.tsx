@@ -8,6 +8,7 @@ export const metadata = {
     title: "Ticket Search",
 }
 
+// Την καλούμε είτε από το URL καρφωτά, είτε από το SearchForm
 export default async function Tickets({
     searchParams,
 }: {

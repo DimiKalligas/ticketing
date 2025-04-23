@@ -5,15 +5,15 @@ import { LoaderCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function SearchButton() {
-    const status = useFormStatus()
+    const { pending } = useFormStatus() // gives status information of the last form submission
 
     return (
         <Button
             type="submit"
-            disabled={status.pending}
+            disabled={pending}
             className="w-20"
         >
-            {status.pending ? (
+            {pending ? (
                 <LoaderCircle className="animate-spin" />
             ) : "Search"}
         </Button>
