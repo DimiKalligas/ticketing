@@ -1,5 +1,8 @@
+import { cookies } from "next/headers";
+import { decrypt } from "@/lib/session";
 import { getCustomer } from "@/lib/queries/getCustomer";
 import { getTicket } from "@/lib/queries/getTicket";
+import { getUser } from "@/lib/queries/getUser";
 import { BackButton } from "@/components/BackButton";
 import TicketForm from "@/app/(ts)/tickets/form/TicketForm";
 
@@ -24,14 +27,15 @@ import TicketForm from "@/app/(ts)/tickets/form/TicketForm";
 //     }
 // }
 
+// από TicketGrid, στέλνει το ticketId
 export default async function TicketFormPage({
     searchParams,
 }: {
     searchParams: Promise<{ [key: string]: string | undefined }>
 }) {
-    try {
+    try {      
         const { customerId, ticketId } = await searchParams
-
+        
         // no customer & no ticket = go back!
         if (!customerId && !ticketId) {
             return (
@@ -41,13 +45,24 @@ export default async function TicketFormPage({
                 </>
             )
         }
+        // 1. βρίσκω το userId από το session
+        const cookie = (await cookies()).get("session")?.value;
+        
+        const session = await decrypt(cookie);
+        // 2. ο χρήστης με αυτό το userId είναι admin? 
+        const user = await getUser({ id: session!.userId as number });
+        
+        // edit right for either admin, or the same user that created the ticket
+        // ΔΕΝ ΕΧΩ user.id
+        const canEdit = (Array.isArray(user) ? false : (user.id === session!.userId || user.role === "admin"));
 
-        const { getPermission, getUser } = getKindeServerSession()
-        const [managerPermission, user] = await Promise.all([
-            getPermission("manager"),
-            getUser(),
-        ])
-        const isManager = managerPermission?.isGranted
+        // check Kinde αν είμαστε manager
+        // const { getPermission, getUser } = getKindeServerSession()
+        // const [managerPermission, user] = await Promise.all([
+        //     getPermission("manager"),
+        //     getUser(),
+        // ])
+        // const isManager = managerPermission?.isGranted
 
         // getting a customer ID means new ticket
         if (customerId) {
@@ -73,13 +88,13 @@ export default async function TicketFormPage({
             }
 
             // return ticket form 
-            if (isManager) {
-                kindeInit() // kinde Management API
-                const { users } = await Users.getUsers() // the techs that are assigned to a ticket
+            if (canEdit) {
+                // να αλλαχτεί η getUsers του Kinde
+                // const { users } = await Users.getUsers() // the techs that are assigned to a ticket
 
-                const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
+                // const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
 
-                return <TicketForm customer={customer} techs={techs} />
+                return <TicketForm customer={customer} /> // techs={techs} 
             } else {
                 return <TicketForm customer={customer} />
             }
@@ -87,7 +102,7 @@ export default async function TicketFormPage({
 
         // getting a ticket ID means editing it
         if (ticketId) {
-            const ticket = await getTicket(parseInt(ticketId))
+            const ticket = await getTicket(parseInt(ticketId))            
 
             if (!ticket) {
                 return (
@@ -100,23 +115,18 @@ export default async function TicketFormPage({
 
             const customer = await getCustomer(ticket.customerId)
 
-            // return to edit ticket form 
-            // console.log('ticket: ', ticket)
-            // console.log('customer: ', customer)
-            if (isManager) {
-                kindeInit() // kinde Management API
-                const { users } = await Users.getUsers() // the techs that are assigned to a ticket
-
-                const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
-
-                return <TicketForm customer={customer} ticket={ticket} techs={techs} />
+            if (canEdit) {
+                // ΕΔΩ ΤΙ ΕΝΝΟΕΙ Ο ΠΟΙΗΤΗΣ?
+                // const { users } = await Users.getUsers() // the techs that are assigned to a ticket
+                // const techs = users ? users.map(user => ({ id: user.email!, description: user.email!})) : []
+                
+                return <TicketForm customer={customer} ticket={ticket} /> // techs={techs} 
             } else {
                 // αν δεν είσαι manager, πρέπει να είσαι ο ίδιος για να κάνεις edit
-                const isEditable = user.email?.toLowerCase() === ticket.tech.toLowerCase()
-                return <TicketForm customer={customer} ticket={ticket} isEditable={isEditable} />
+                // const isEditable = user.email?.toLowerCase() === ticket.tech.toLowerCase()
+                return <TicketForm customer={customer} ticket={ticket} isEditable={canEdit} />
             }
             // return <TicketForm customer={customer} ticket={ticket} />
-
         }
 
     } catch (e) {

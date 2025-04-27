@@ -62,6 +62,7 @@ H `<layout>` καλεί την `<Header>` -> H `<Header>` έχει `NavButton` �
 To **Data layer** για customer data είναι στο `E:\dev\NextJS\ticketing\src\app\(ts)\customers\form\page.tsx`
 
 # Flow: 
+login: αν τα formData ταιριάζουν με τον καρφωτό testUser, σώζουμε session με το id?? του user
 εχουμε μια σελίδα που διαβάζει από τα searchParams ποιόν πελάτη θέλουμε, πάει και βρίσκει τα στοιχεία του, και καλεί μια φόρμα η οποία είτε κάνει populate τα πεδία με τις τιμές που τις στέλνουμε, ή αλλιώς βάζει τα default values (κενά) -> Αναλυτικά:
 όταν ζητάμε `http://localhost:3000/customers/form?customerId=4` 
 - τρέχει η <src\app\(ts)\customers\form\CustomerFormPage({searchParams})>
@@ -102,18 +103,15 @@ install jose
 
 
 > TO DO (CTRL-K V)
-0. [x] να ξηλώσω το kinde & να γίνει με Jose-JWT αλά Cosden
-0. [X] στο TicketGrid να ελέγχει αν είναι manager -> middleware!
-1. [] να φτιάξω τη app\login\page ξανά
-1. [] να φτιάξω τη σελίδα του ticket: ./src/app/(ts)/tickets/form/page.tsx 
-2. [] η ticket form να διαβάζει role
+[] Customer's form
+3. [] να δω ποιά <Form> για το login (see: next.js Form)
 3. [] το middleware κοιτάει απλώς αν υπάρχει session..
 4 [ ] να δω docs routing > error handling
 5. [ ] να δουλέψω το InputWithLabel σε δικό μου project
+5. [] να δω το Data Access Layer
 6. [ ] γιατί χρησιμοποιεί const form = useFormContext() αντί για useForm()?
     - useForm() is used to initialize a new form and is typically used in the parent component.
     - useFormContext() is useful in large forms with multiple child components, avoiding unnecessary prop drilling.
-7. [] RBAC
 8. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
 9 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
 10. [x] Ticket Table: αν auth: να γίνεται 
@@ -122,4 +120,11 @@ install jose
     7.3 [x] να παίρνει το light/dark από το theme = read localStorage theme
 11. [χ] να δω πάλι γιατί έχουμε 2 schemas (στο zod\schemas & στο lib/queries/ db\schema?)
     στο <zod\schemas> έχουμε τα drizzle schemas (createInsert & createSelect που προσθέτουνε regex & μήνυμα λάθους πάνω στο reference to db schema, το οποίο χρειάζεται άσχετα αν εδώ το τροποποιούμε κιόλας!)
+12. Που χρειάζονται τα DisplayServerActionResponse, upsertTicket & upsertCustomer?
+[x] να ξηλώσω το kinde & να γίνει με Jose-JWT
+[x] να φτιάξω τη app\login\page ξανά
+[x] οι users να μπουν στη βάση -> όπου testUser να κοιτάω βάση (κοίτα \src\lib\queries\getCustomer.ts)
+[x] να φτιάξω τη φόρμα του ticket: ./src/app/(ts)/tickets/form/page.tsx 
+[x] η ticket form να διαβάζει role = o admin & ο ίδιος user μπορούν να κάνουν edit
+[x] RBAC = διαβάζω το role από το user object
 

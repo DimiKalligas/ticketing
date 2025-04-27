@@ -16,10 +16,8 @@ import { selectCustomerSchemaType } from "@/zod-schemas/customer"
 import { useState } from "react"
 import { toast } from "sonner"
 import { LoaderCircle } from 'lucide-react'
-import { saveTicketAction } from "@/app/actions/saveTicketAction"
 import { useRouter } from "next/navigation"
 import { upsertTicket } from '@/app/actions/saveTicketAction'
-import { DisplayServerActionResponse } from "@/components/DisplayServerActionResponse"
 
 type Props = {
     customer: selectCustomerSchemaType,

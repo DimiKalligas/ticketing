@@ -2,6 +2,13 @@ import { pgTable, serial, varchar, boolean, timestamp, integer, text } from "dri
 import { relations } from "drizzle-orm"
 
 // εδώ ορίζουμε ΜΟΝΟ το σχήμα της βάσης, για input validation θα το κάνουμε extend στο src\zod-schemas\customer.ts
+export const users = pgTable("users", {
+    id: serial("id").primaryKey(),  
+    email: varchar("email").notNull().unique(),
+    password: varchar("password").notNull(),    
+    role: varchar("role").notNull().default("user"),
+})
+
 export const customers = pgTable("customers", {
     id: serial("id").primaryKey(),
     firstName: varchar("first_name").notNull(),

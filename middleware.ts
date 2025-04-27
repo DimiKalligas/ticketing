@@ -2,7 +2,22 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./src/lib/session";
 
-const protectedRoutes = ["/tickets", "/customers"];
+// export type UserEnumTypes = "user" | "manager" | "admin";
+
+// export type Tokens = { // Actual Token Type
+//   access: string;
+//   refresh?: string;
+// }
+
+// export type UserType = { // Payload when decrypted from JWT
+//   accountType: UserEnumTypes;
+//   accountid: string;
+//   exp: number;
+//   email: string;
+//   updatedAt: string;
+// }
+
+const protectedRoutes = ["/tickets", "/customers", "/actions/saveTicketAction"];  // ή και src\app\(ts)\tickets\form\TicketForm.tsx
 const publicRoutes = ["/login"];
 
 export default async function middleware(req: NextRequest) {

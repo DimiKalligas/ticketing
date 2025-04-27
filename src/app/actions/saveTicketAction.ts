@@ -1,6 +1,6 @@
 'use server'
 
-import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
+// import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 import { db } from '@/db'
 import { tickets } from '@/db/schema'
 import { eq } from 'drizzle-orm'
@@ -8,14 +8,15 @@ import { insertTicketSchema, type insertTicketSchemaType } from '@/zod-schemas/t
 import { redirect } from 'next/navigation'
 
 export async function upsertTicket(formData: insertTicketSchemaType) {
-    const { isAuthenticated } = getKindeServerSession()
+    // to πήγαμε στο middleware
+    // const { isAuthenticated } = getKindeServerSession()
     
-    // Check if user is authenticated
-    const isAuth = await isAuthenticated()
-    if (!isAuth) {
-    //   throw new Error('Unauthorized: Please log in')
-      redirect('/login')
-    }
+    // // Check if user is authenticated
+    // const isAuth = await isAuthenticated()
+    // if (!isAuth) {
+    // //   throw new Error('Unauthorized: Please log in')
+    //   redirect('/login')
+    // }
 
     // Πως γράφουμε sql
     // const query = sql.raw("select * from tickets")
