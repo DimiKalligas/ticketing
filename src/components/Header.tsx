@@ -10,7 +10,8 @@ import { redirect } from 'next/navigation';
 
 export function Header() {
   return (
-    <header className='animate-slide bg-background h-12 p-2 border-b sticky top-0 z-20'>
+    // animate-slide
+    <header className='animate-in fade-in zoom-in-95 bg-background h-12 p-2 border-b sticky top-0 z-20'>
         <div className="flex h-8 items-center justify-between w-full">
             <div className="flex items-center gap-2">
                 <NavButton href='/home' label='Home' icon={HomeIcon} />

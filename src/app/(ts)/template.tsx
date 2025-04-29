@@ -5,8 +5,8 @@ export default async function Template({
   children: React.ReactNode
 }) {
   return (
-    // the animation
-    <div className="animate-appear">
+    // smooth entrance animation from shadcn's animation utilities
+    <div className="animate-in fade-in zoom-in-95">
         {children}
     </div>
   )

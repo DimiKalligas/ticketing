@@ -77,10 +77,10 @@ export default {
 				}
 			}
 		},
-		animation: {
-			"appear": "appear 1s ease-in-out",
-			"slide": "slide 750ms ease-in-out",
-		},
+		// animation: {
+		// 	"appear": "appear 1s ease-in-out",
+		// 	"slide": "slide 750ms ease-in-out",
+		// },
   	}
   },
   plugins: [require("tailwindcss-animate")],

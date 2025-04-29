@@ -13,6 +13,15 @@ import {
   RowClickedEvent,
   ICellRendererParams,
 } from 'ag-grid-community';
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 import { useTheme } from "next-themes"
@@ -26,9 +35,8 @@ type Props = {
 }
 
 export default function CustomerGrid({ data: data }: Props) {  
-  const [selectedRowData, setSelectedRowData] = useState<any>(null);
-  // const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { theme } = useTheme()
   const router = useRouter();
@@ -50,7 +58,7 @@ export default function CustomerGrid({ data: data }: Props) {
   // Handle row click and navigate
   const onRowClicked = useCallback((event: any) => { // RowClickedEvent
     setSelectedRowData(event.data);
-    setMousePosition({ x: event.event.clientX, y: event.event.clientY }); // record mouse position
+    setAnchorEl(event.event.target); // this is the clicked cell or row element
     setPopoverOpen(true);
     // const recordId = event.data.id;
     // router.push(`/tickets/form?ticketId=${recordId}`); // Redirect to record page
@@ -76,44 +84,41 @@ export default function CustomerGrid({ data: data }: Props) {
         // defaultColDef={defaultColDef}
       />
       
-      {popoverOpen && selectedRowData &&  (
-      //   <div
-      //     style={{
-      //       position: "absolute",
-      //       top: mousePosition.y,
-      //       left: mousePosition.x,
-      //       zIndex: 1000,
-      //     }}
-      // >
+      {anchorEl && selectedRowData &&  (
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             <div style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none" }} />
           </PopoverTrigger>
           <PopoverContent
-            align="start"
+          
             side="right"
-            className="animate-in fade-in zoom-in-95 border-2 border-gray-500 rounded-md bg-white shadow-md p-2"
+            align="start"
             style={{
               position: "absolute",
-              top: mousePosition.y,
-              left: mousePosition.x,
-              width: 101,
-              transform: "translateY(8px)", // slight offset
-              zIndex: 1000,
-              pointerEvents: "auto",
-              border: "2px solid #888", // ⬅️ extra border here
-              borderRadius: "8px",      // optional: rounded corners
-              backgroundColor: "white", // optional for better visibility
+              top: anchorEl.getBoundingClientRect().top + window.scrollY,
+              left: anchorEl.getBoundingClientRect().left + window.scrollX,
+              pointerEvents: "auto"
             }}
-            avoidCollisions={false} // prevent Radix from changing your position
-            >
-            <div className="flex flex-col space-y-2">
-              <Link href={`/tickets/form?ticketId=${selectedRowData.id}`} className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">Edit</Link>
-              <Link href="/tickets/form" className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">New</Link>
-            </div>
+          >
+            <Menubar>
+              <MenubarMenu>
+                {/* <MenubarTrigger>Actions</MenubarTrigger> */}
+                <MenubarContent>
+                <MenubarItem asChild>
+                    <Link href={`/tickets/form?ticketId=${selectedRowData.id}`}>
+                      Edit
+                    </Link>
+                  </MenubarItem>
+                  <MenubarItem asChild>
+                    <Link href="/tickets/form">
+                      New
+                    </Link>
+                  </MenubarItem>
+                </MenubarContent>
+              </MenubarMenu>
+                </Menubar>
           </PopoverContent>
         </Popover>
-        // </div>
       )}
     </div>
   );

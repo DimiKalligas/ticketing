@@ -53,7 +53,6 @@ export default async function TicketFormPage({
         const user = await getUser({ id: session!.userId as number });
         
         // edit right for either admin, or the same user that created the ticket
-        // ΔΕΝ ΕΧΩ user.id
         const canEdit = (Array.isArray(user) ? false : (user.id === session!.userId || user.role === "admin"));
 
         // check Kinde αν είμαστε manager

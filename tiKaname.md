@@ -10,10 +10,10 @@ login με **jim@email.com 123**
 
 # tailwind.config.css
 1. ορίσαμε το background: βάλαμε ως <bg-home-img>
-2. ορίσαμε τa <animate-slide> & <animate-appear>: τα keyframes & το animation
+2. αφαίρεσα τα <animate-slide> & <animate-appear>: τα keyframes & το animation
 
 # animation
-αρχικά το βάλαμε στο <app\(ts)\template>
+smooth entrance animation from shadcn's animation utilities στο <app\(ts)\template> & στο <Header>
 
 # Tailwind
 flex flex-col sm:flex-row για adaptive
@@ -101,9 +101,8 @@ setup <@/lib/session.ts>
 install jose
 *** Θα πρέπει να έχω Admin / Manager / User roles **
 
-
 > TO DO (CTRL-K V)
-[] Customer's form
+[] Customer's form -> στο onclick -> Edit Customer / New Ticket
 3. [] να δω ποιά <Form> για το login (see: next.js Form)
 3. [] το middleware κοιτάει απλώς αν υπάρχει session..
 4 [ ] να δω docs routing > error handling
@@ -113,7 +112,6 @@ install jose
     - useForm() is used to initialize a new form and is typically used in the parent component.
     - useFormContext() is useful in large forms with multiple child components, avoiding unnecessary prop drilling.
 8. [ ] να κάνω τα CustomerSearch & TicketSearch ΕΝΑ reusable component!
-9 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
 10. [x] Ticket Table: αν auth: να γίνεται 
     7.1 [ ] edit το notes πεδίο μέσα στον πίνακα (με EditableCell αλά React Table Tutorial (TanStack Table) Nikita) 
     7.2 [ ] και dropdown menu για το tech
@@ -127,4 +125,5 @@ install jose
 [x] να φτιάξω τη φόρμα του ticket: ./src/app/(ts)/tickets/form/page.tsx 
 [x] η ticket form να διαβάζει role = o admin & ο ίδιος user μπορούν να κάνουν edit
 [x] RBAC = διαβάζω το role από το user object
+9 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
 
