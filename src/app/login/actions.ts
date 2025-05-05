@@ -13,11 +13,14 @@ const loginSchema = z.object({
     .trim(),
 })
 
-// κάνει check τα email & password αν ταιριάζουν με αυτά του καρφωτού testUser
+// κάνει check τα email & password αν ταιριάζουν με κάποιου user από τη βάση
 export async function login(prevState: any, formData: FormData) {
     // convert formData into Object and safe parsing it into loginschema
     const result = loginSchema.safeParse(Object.fromEntries(formData));
   
+    // console.log('in login received:', Object.fromEntries(formData));
+    console.log('in login received:', result.data.email);
+    
     if (!result.success) {
       console.log('failed in safeParse');
       
@@ -27,7 +30,10 @@ export async function login(prevState: any, formData: FormData) {
     }
   
     const { email, password } = result.data;
-    const user = await getUser({ id: session!.userId as number });
+    // τι στέλνω στη getUser?
+    // const user = await getUser({ id: session!.userId as number });
+    const user = await getUser(result.data.email as string);
+    console.log('user', user);
   
     if (email !== user.email || password !== user.password) {
       return {

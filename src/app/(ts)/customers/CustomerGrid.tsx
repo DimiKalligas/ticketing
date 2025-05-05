@@ -108,7 +108,7 @@ export default function CustomerGrid({ data: data }: Props) {
             avoidCollisions={false} // prevent Radix from changing your position
             >
             <div className="flex flex-col space-y-2">
-              <Link href={`/tickets/form?ticketId=${selectedRowData.id}`} className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">Edit</Link>
+              <Link href={`/customers/form?customerId=${selectedRowData.id}`} className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">Edit</Link>
               <Link href="/tickets/form" className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">New</Link>
             </div>
           </PopoverContent>

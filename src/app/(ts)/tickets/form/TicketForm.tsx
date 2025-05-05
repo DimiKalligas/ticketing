@@ -36,12 +36,13 @@ export default function TicketForm({
     const [errors, setErrors] = useState<Record<string, string[]> | null>(null);
     const [success, setSuccess] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    // Tι εννοεί εδώ????
     const isManager = Array.isArray(techs)
 
     const router = useRouter()
 
     const defaultValues: insertTicketSchemaType = {
-        id: ticket?.id ?? "(New)",
+        id: ticket?.id ?? "(New)", // αν δεν υπάρχει ticketId, φτιάξε νέο ticket
         customerId: ticket?.customerId ?? customer.id,
         title: ticket?.title ?? '',
         description: ticket?.description ?? '',
@@ -56,10 +57,10 @@ export default function TicketForm({
     })
 
     async function submitForm(data: insertTicketSchemaType) {
-        console.log(data)
+        // console.log(data)
         setErrors(null);
         setSuccess(false);
-        console.log('form submitted!');
+        // console.log('form submitted!');
             
         setIsSaving(true)
         const result = await upsertTicket(data)
@@ -77,7 +78,7 @@ export default function TicketForm({
             setIsSaving(false)
             router.back()
             // return;
-      } 
+        } 
 
         // Handle errors
         if (!result.success) {
@@ -103,7 +104,7 @@ export default function TicketForm({
             // }
             setIsSaving(false)
             return;
-          }
+        }
     }
 
     return (
@@ -146,7 +147,7 @@ export default function TicketForm({
                             />
                         )}
 
-{/* only if we are editing the ticket we are showing the checkbox */}
+                        {/* only if we are editing the ticket we are showing the checkbox */}
                         {ticket?.id ? (
                             <CheckboxWithLabel<insertTicketSchemaType>
                                 fieldTitle="Completed"
@@ -173,7 +174,6 @@ export default function TicketForm({
                     </div>
 
                     <div className="flex flex-col gap-4 w-full max-w-xs">
-
                         <TextAreaWithLabel<insertTicketSchemaType>
                             fieldTitle="Description"
                             nameInSchema="description"
@@ -209,12 +209,9 @@ export default function TicketForm({
                                 </Button>
                             </div>
                         ) : null}
-
                     </div>
-
                 </form>
             </Form>
-
         </div>
     )
 }

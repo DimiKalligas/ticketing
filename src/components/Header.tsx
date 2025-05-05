@@ -1,12 +1,11 @@
 import { HomeIcon, File, UsersRound, LogOut } from 'lucide-react'
 import Link from 'next/link'
 
-import { Button } from '@/components/ui/button'
 import { NavButton } from '@/components/NavButton'
 import { ModeToggle } from '@/components/ModeToggle'
 import { NavButtonMenu } from './NavButtonMenu'
-import { deleteSession } from '@/lib/session'
-import { redirect } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { logout } from '@/app/actions/logout';
 
 export function Header() {
   return (
@@ -33,22 +32,14 @@ export function Header() {
                 />
               {/* <NavButton href='/customers' label='customers' icon={UsersRound} /> */}
               <ModeToggle />
-              <Button 
-                variant='ghost'
-                size='icon'
-                aria-label='LogOut'
-                className='rounded-full'
-                asChild // in order to wrap this link
-              >
-                logout()
-              </Button>
+              <form action={logout}>
+                <Button type="submit" variant="ghost" size="icon">
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </form>
             </div>
         </div>
     </header>
   )
 }
 
-export async function logout() {
-  await deleteSession();
-  redirect("/login");
-}

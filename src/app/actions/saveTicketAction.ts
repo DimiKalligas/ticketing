@@ -7,6 +7,7 @@ import { eq } from 'drizzle-orm'
 import { insertTicketSchema, type insertTicketSchemaType } from '@/zod-schemas/ticket'
 import { redirect } from 'next/navigation'
 
+// την καλεί η TicketForm
 export async function upsertTicket(formData: insertTicketSchemaType) {
     // to πήγαμε στο middleware
     // const { isAuthenticated } = getKindeServerSession()

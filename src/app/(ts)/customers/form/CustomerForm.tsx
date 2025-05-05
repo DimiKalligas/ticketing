@@ -9,7 +9,6 @@ import { SelectWithLabel } from "@/components/inputs/SelectWithLabel"
 import { TextAreaWithLabel } from "@/components/inputs/TextAreaWithLabel"
 import { CheckboxWithLabel } from "@/components/inputs/CheckboxWithLabel"
 
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs"
 import { StatesArray } from "@/constants/StatesArray"
 import { insertCustomerSchema, type insertCustomerSchemaType, type selectCustomerSchemaType } from "@/zod-schemas/customer"
 import { useState } from "react"
@@ -21,7 +20,6 @@ import { DisplayServerActionResponse } from "@/components/DisplayServerActionRes
 import { LoaderCircle } from "lucide-react"
 
 type Props = {
-    // customer?: selectCustomerSchemaType, ***
     customer?: insertCustomerSchemaType,
 }
 
@@ -30,9 +28,6 @@ export default function CustomerForm({ customer }: Props) {
     const [success, setSuccess] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const router = useRouter()
-    const { getPermission, isLoading } = useKindeBrowserClient()
-    // isManager could be Admin also
-    const isManager = !isLoading && getPermission('manager')?.isGranted
     // getPermissions provides an array of permissions, so this could also work ->
     // const permObj = getPermissions()
     // const isAuthorized = !isLoading && permObj.permissions.some(perm => perm === 'manager' || perm === 'admin')
@@ -55,7 +50,6 @@ export default function CustomerForm({ customer }: Props) {
     // New Customer 
     // All new customers are active by default - no need to set active to true
     // createdAt and updatedAt are set by the database
-
     const form = useForm<insertCustomerSchemaType>({
         mode: 'onBlur', // user sees the validation as soon as they tab out
         resolver: zodResolver(insertCustomerSchema),
@@ -171,8 +165,8 @@ export default function CustomerForm({ customer }: Props) {
                             nameInSchema='notes'
                             className="h-40"
                         />
-
-                        {isLoading ? <p>Loading...</p> : isManager && customer?.id ? (
+                        {/* isLoading ? <p>Loading...</p> :  isManager && */}
+                        {customer?.id ? (
                             <CheckboxWithLabel<insertCustomerSchemaType>
                                 fieldTitle="Active"
                                 nameInSchema="active"

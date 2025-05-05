@@ -61,6 +61,11 @@ To DAL μας βρίσκεται στα <app\(ts)\customers\form> & <app\(ts)\ti
 H `<layout>` καλεί την `<Header>` -> H `<Header>` έχει `NavButton` για routing
 To **Data layer** για customer data είναι στο `E:\dev\NextJS\ticketing\src\app\(ts)\customers\form\page.tsx`
 
+# login Flow
+H form <page\login> καλεί το server action <login> με τα formData `email` & `password`
+η <login> ζητά από τη <getUser> με το email να βρει τον user από τη βάση
+αν τον βρει -> κάνει `createSession(id)`, και σε κάνει redirect στα </tickets>??
+
 # Flow: 
 login: αν τα formData ταιριάζουν με τον καρφωτό testUser, σώζουμε session με το id?? του user
 εχουμε μια σελίδα που διαβάζει από τα searchParams ποιόν πελάτη θέλουμε, πάει και βρίσκει τα στοιχεία του, και καλεί μια φόρμα η οποία είτε κάνει populate τα πεδία με τις τιμές που τις στέλνουμε, ή αλλιώς βάζει τα default values (κενά) -> Αναλυτικά:
@@ -102,9 +107,9 @@ install jose
 *** Θα πρέπει να έχω Admin / Manager / User roles **
 
 > TO DO (CTRL-K V)
-[] Customer's form -> στο onclick -> Edit Customer / New Ticket
+[] Customer's form -> στο onclick -> Edit Customer / New Ticket / see All Customer;s tickets?
+[] να φτιάξω component που να επιστρέφει user (για <CustomerFormPage> & <TicketFormPage>)
 3. [] να δω ποιά <Form> για το login (see: next.js Form)
-3. [] το middleware κοιτάει απλώς αν υπάρχει session..
 4 [ ] να δω docs routing > error handling
 5. [ ] να δουλέψω το InputWithLabel σε δικό μου project
 5. [] να δω το Data Access Layer
@@ -126,4 +131,6 @@ install jose
 [x] η ticket form να διαβάζει role = o admin & ο ίδιος user μπορούν να κάνουν edit
 [x] RBAC = διαβάζω το role από το user object
 9 [x] να φύγει το tanstack table & να μπει AG Grid - λύνει και τα επόμενα:
+[x] να μπορώ να κάνω logout από το Header........
+[x] Η <ΤicketForm> πως βλέπει αν είμαστε Manager? -> από TicketFormPage
 

@@ -27,6 +27,8 @@ import TicketForm from "@/app/(ts)/tickets/form/TicketForm";
 //     }
 // }
 
+// βλέπουμε ποιός είναι ο user & αν είναι admin
+// αν υπάρχει active customer = θέλει να κάνει edit ticket
 // από TicketGrid, στέλνει το ticketId
 export default async function TicketFormPage({
     searchParams,
@@ -49,10 +51,12 @@ export default async function TicketFormPage({
         const cookie = (await cookies()).get("session")?.value;
         
         const session = await decrypt(cookie);
+        console.log("session.userId", session.userId)
         // 2. ο χρήστης με αυτό το userId είναι admin? 
-        const user = await getUser({ id: session!.userId as number });
+        const user = await getUser(Number(session!.userId) as number);
         
         // edit right for either admin, or the same user that created the ticket
+        // πότε μπορεί να έχουμε array από users?
         const canEdit = (Array.isArray(user) ? false : (user.id === session!.userId || user.role === "admin"));
 
         // check Kinde αν είμαστε manager
@@ -95,10 +99,12 @@ export default async function TicketFormPage({
 
                 return <TicketForm customer={customer} /> // techs={techs} 
             } else {
+                // *** να δείξω μήνυμα ότι δεν μπορείς να κάνεις edit ***
                 return <TicketForm customer={customer} />
             }
         }
 
+        // ΔΕΝ υπάρχει customer ->
         // getting a ticket ID means editing it
         if (ticketId) {
             const ticket = await getTicket(parseInt(ticketId))            
@@ -128,6 +134,7 @@ export default async function TicketFormPage({
             // return <TicketForm customer={customer} ticket={ticket} />
         }
 
+        // *** αν δεν υπάρχει ticketId? ***
     } catch (e) {
         if (e instanceof Error) {
             throw e
