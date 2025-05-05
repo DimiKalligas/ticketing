@@ -19,7 +19,6 @@ import { useTheme } from "next-themes"
 import Link from 'next/link'
 import type { selectCustomerSchemaType } from "@/zod-schemas/customer"
 import { useCallback, useMemo, useState, } from 'react';
-import { useRouter } from 'next/navigation';
 
 type Props = {
     data: selectCustomerSchemaType[],
@@ -27,11 +26,9 @@ type Props = {
 
 export default function CustomerGrid({ data: data }: Props) {  
   const [selectedRowData, setSelectedRowData] = useState<any>(null);
-  // const [clickPosition, setClickPosition] = useState<{ x: number; y: number } | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { theme } = useTheme()
-  const router = useRouter();
   
   ModuleRegistry.registerModules([
     PaginationModule,
@@ -52,8 +49,6 @@ export default function CustomerGrid({ data: data }: Props) {
     setSelectedRowData(event.data);
     setMousePosition({ x: event.event.clientX, y: event.event.clientY }); // record mouse position
     setPopoverOpen(true);
-    // const recordId = event.data.id;
-    // router.push(`/tickets/form?ticketId=${recordId}`); // Redirect to record page
   }, []); // router
 
   // να περάσει το Dark theme στον πίνακα
@@ -77,14 +72,6 @@ export default function CustomerGrid({ data: data }: Props) {
       />
       
       {popoverOpen && selectedRowData &&  (
-      //   <div
-      //     style={{
-      //       position: "absolute",
-      //       top: mousePosition.y,
-      //       left: mousePosition.x,
-      //       zIndex: 1000,
-      //     }}
-      // >
         <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
           <PopoverTrigger asChild>
             <div style={{ position: "absolute", top: 0, left: 0, pointerEvents: "none" }} />
@@ -109,16 +96,14 @@ export default function CustomerGrid({ data: data }: Props) {
             >
             <div className="flex flex-col space-y-2">
               <Link href={`/customers/form?customerId=${selectedRowData.id}`} className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">Edit</Link>
-              <Link href="/tickets/form" className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">New</Link>
+              <Link href='/customers/form' className="text-sm px-2 py-1 hover:no-underline hover:bg-sky-100">New</Link>
             </div>
           </PopoverContent>
         </Popover>
-        // </div>
       )}
     </div>
   );
 }
-
     
     
     

@@ -107,7 +107,7 @@ install jose
 *** Θα πρέπει να έχω Admin / Manager / User roles **
 
 > TO DO (CTRL-K V)
-[] Customer's form -> στο onclick -> Edit Customer / New Ticket / see All Customer;s tickets?
+[] Customer's form -> στο onclick -> see All Customer's tickets?
 [] να φτιάξω component που να επιστρέφει user (για <CustomerFormPage> & <TicketFormPage>)
 3. [] να δω ποιά <Form> για το login (see: next.js Form)
 4 [ ] να δω docs routing > error handling

@@ -21,7 +21,7 @@ type Props<S> = { // <S> is for schema
 export function InputWithLabel<S>({
     fieldTitle, nameInSchema, className, ...props
 }: Props<S>) {
-    const form = useFormContext()
+    const form = useFormContext() // ετσι παίρνει το form.control
 
     return (
         <FormField
